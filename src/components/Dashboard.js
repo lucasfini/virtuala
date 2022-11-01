@@ -31,22 +31,23 @@ function Dashboard(props) {
     const userCommands = await CallAPI("gw/commands/fetch/all", "GET", "");
     if (userCommands.success) {
       setCommands(JSON.parse(userCommands.data));
-      setSelectField([{ options: JSON.parse(userCommands.data) }]);
     }
 
   };
 
   const makeIdRequest = async (id) =>{
-   
-   
+
+
     const userMakeup = await CallAPI("gw/commands/fetch/" + id, "GET", "");
+    var selectedFields = []
     if (userMakeup.success) {
       console.log(userMakeup.data);
         setMakeup(JSON.parse(userMakeup.data));
         const make = (JSON.parse(userMakeup.data).makeup.split(','));
-        for (var j = 1; j < make.length; j++) {
-          setSelectField((e) => [...e, { options: commands }]);
+        for (var j = 0; j < make.length; j++) {
+          selectedFields.push(make[j])
         }
+        setSelectField(selectedFields)
   }
 
   setIsEditing(true);
@@ -106,16 +107,7 @@ function Dashboard(props) {
     onCommandTitleChange(makeup.commandName);
     toggleAddCommand(true);
     toggleDeleteCommand(true);
-    for (var i = 0; i < SelectFields.length; i++) {
- 
-      console.log( document.getElementById("selectedOption-0"));
-      for (var j = 0; j < SelectFields[0].options.length; j++) {
-       //   document.getElementById("selectedOption-" + i).options.item(j).setAttribute("selected",'selected');
-        
-      }
-    
 
-  }
     setIsEditing(false);
     setIsCallingAPI(false);
     // const resp = await CallAPI("/gw/commands/edit", "POST", fd);
@@ -197,17 +189,18 @@ function Dashboard(props) {
 
 
     return SelectFields.map((data, index) => {
+      console.log(data);
       return (
         <div className="col-2 p-0" key={index}>
-          <select className="form-select" id={"selectedOption-" + index}>
-            {SelectFields[index].options.map((data, index) => {
+          <select className="form-select" id={"selectedOption-" + index} defaultValue={data}>
+            {commands.map((dataCommands, indexCommands) => {
               return (
                 <option
-                  id={"option-" + index}
-                  key={index}
-                  value={data.commandId}
+                  id={"option-" + indexCommands + "-" + dataCommands.commandId}
+                  key={indexCommands}
+                  value={dataCommands.commandId}
                 >
-                  {data.commandName}
+                  {dataCommands.commandName}
                 </option>
               );
             })}
@@ -219,7 +212,7 @@ function Dashboard(props) {
 
   useEffect(() => {
     makeRequest();
-    
+
   }, []);
 
 
