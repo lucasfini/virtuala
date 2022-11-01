@@ -1,0 +1,1118 @@
+.App {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.Tool {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow-x: hidden;
+}
+
+
+.HistoryBar {
+  height: calc(100vh - 80px);
+  width: 300px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.container {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.container::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+.HistoryTitleContainer {
+  width: 100%;
+  margin-left: 15px;
+  margin-top: 5px;
+  align-items: flex-start;
+}
+
+.HistoryTitle {
+  font-size: 25px;
+  color: black;
+  font-family: "lorettoultrabold";
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.HistoryItemContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.HistoryItemContainer:last-child {
+  margin-bottom: 10px;
+}
+
+.HistoryItem {
+  width: calc(100% - 40px);
+  margin-top: 10px;
+  height: max-content;
+  background-color: rgba(255,0,0,0.25);
+  border-radius: 15px;
+  border-width: 2px;
+  border-style: solid;
+  border-color: red;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.HistoryItemInputContainer {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.HistoryItemTitle {
+  color: red;
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-family: "lorettobold";
+}
+
+.HistoryItemText {
+  color: black;
+  font-size: 14px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+  font-family: "lorettomedium";
+}
+
+.Workspace {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.OptionsContainer {
+  height: max-content;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.OptionText {
+  margin-left: 20px;
+  margin-right: 20px;
+  font-size: 25px;
+  font-family: "lorettomedium";
+}
+
+.Option {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: red;
+  border-radius: 10px;
+  font-size: 25px;
+  font-family: "lorettomedium";
+  border-width: 2px;
+  border-style: solid;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+
+.OptionList {
+  height: max-content;
+  position: absolute;
+}
+
+.OptionListItem {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: red;
+  border-radius: 10px;
+  font-size: 25px;
+  font-family: "lorettomedium";
+  border-width: 2px;
+  border-style: solid;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+}
+
+.InputContainer {
+  height: max-content;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.OutputContainer {
+  height: max-content;
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.InputArea {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.InputTextArea {
+  resize: none;
+  border-style: none;
+  border-color: Transparent;
+  overflow: auto;
+  background-color: #FFF;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  height: 40px;
+  width: 400px;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: black;
+  font-size: 20px;
+  font-family: "lorettomedium";
+  border-color: black;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.InputFetchButton {
+  background-color: black;
+  height: 46px;
+  width: 40px;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.TextArea {
+  height: 500px;
+  width: 800px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 15px;
+}
+
+.showOnlyOnMobile {
+  display: none;
+}
+
+.hideOnMobile {
+  display: block;
+}
+
+.LoadMoreButton {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 50px;
+  background: rgb(29,161,242);
+  background: linear-gradient(9deg, rgba(29,161,242,1) 0%, rgba(129,12,90,1) 100%);  font-size: 15px;
+  color: white;
+  font-family: "lorettosemibold";
+  margin: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  max-width: 80px;
+}
+
+.LoadMoreButton:hover {
+  background: linear-gradient(9deg, rgba(29,161,242,0.75) 0%, rgba(129,12,90,0.75) 100%);
+}
+
+.LoadMoreButtonContainer {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* width */
+.InputTextArea::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+.InputTextArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+.InputTextArea::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.35);
+  border-radius: 30px;
+}
+
+/* Handle on hover */
+.InputTextArea::-webkit-scrollbar-thumb:hover {
+  background: rgba(0,0,0,0.5);
+}
+
+.OutputButtonArea {
+  background-color: black;
+  height: 46px;
+  width: 40px;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.TextAreaVersion {
+  height: 524px;
+}
+
+.OutputRating {
+  height: max-content;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.OutputRatingItem {
+  cursor: pointer;
+}
+
+.ThumbsUpRating {
+  color: rgba(255,255,255,0.85);
+}
+
+.ThumbsUpRating:hover {
+  color: rgba(0,255,0,1);
+}
+
+.ThumbsDownRating {
+  color: rgba(255,255,255,0.85);
+}
+
+.ThumbsDownRating:hover {
+  color: rgba(255,0,0,1);
+}
+
+.ThumbsUpRatingSolid {
+  color: rgba(0,255,0,1);
+}
+
+.ThumbsDownRatingSolid {
+  color: rgba(255,0,0,1);
+}
+
+.CopyOutput {
+  color: rgba(255,255,255,0.85);
+}
+
+.CopyOutput:hover {
+  color: rgba(77, 144, 255, 1);
+}
+
+.CopyOutput:focus {
+  color: rgba(101, 158, 252, 1);
+}
+
+.ToolTitleText {
+  font-size: 20px;
+  font-family: "lorettobold";
+}
+
+.ToastContainer {
+  background: red;
+}
+
+.Navbar {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-width: 0 0 5px 0;
+  border-color: black;
+  border-style: solid;
+  overflow: hidden;
+}
+
+.UserWrapper {
+  height: max-content;
+  position:static;
+}
+
+.UserButton {
+  height: 100%;
+  width: 100%;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+.UserTitle {
+  font-size: 18px;
+  font-family: "lorettobold";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: inline-block;
+  position: relative;
+}
+
+.UserTitle:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -3px;
+  left: 0;
+  background: linear-gradient(9deg, rgba(29,161,242,0.75) 0%, rgba(129,12,90,0.75) 100%);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.UserTitle:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+.UserList {
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  height: max-content;
+  position: absolute;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  overflow: hidden;
+}
+
+.UserListItem {
+  flex: 1;
+  background-color: white;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-family: "lorettosemibold";
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.UserListItem:hover {
+  background-color: rgb(240,240,240);
+}
+
+.NavMobileWrapper {
+  margin-top: 2px;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.NavMobile {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.NavMobile:hover {
+  background-color: rgba(0,0,0,0.75);
+}
+
+.MobileMenuOverlay {
+  display: flex;
+  background-color: rgba(255,255,255,0.85);
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.MobileMenuClose {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 6px;
+  right: 5px;
+  font-size: 30px;
+  font-family: "lorettobold";
+  cursor: pointer;
+}
+
+.MobileMenu {
+  width: 100%;
+  min-width: 200px;
+  background-color: white;
+  padding-left: 10px;
+  padding-top: 10px;
+}
+
+.MobileMenuItem {
+  width: 100%;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-family: "lorettosemibold";
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.SheetModal {
+  height: max-content;
+  padding-bottom: 20px;
+  overflow: hidden !important;
+}
+
+.NewInputButton {
+  position: fixed;
+  bottom: 25px;
+  right: 15px;
+  background: rgb(29,161,242);
+  background: linear-gradient(9deg, rgba(29,161,242,1) 0%, rgba(129,12,90,1) 100%);  font-size: 15px;
+  border-radius: 50px;
+  height: 60px;
+  width: 60px;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.NewInputButton:hover {
+  background: linear-gradient(9deg, rgba(29,161,242,0.75) 0%, rgba(129,12,90,0.75) 100%);
+}
+
+.SignIn {
+  display: flex;
+  flex: 1;
+  height: 100vh;
+  width: 100%;
+  background-color: red;
+  justify-content: center;
+  align-items: center;
+}
+
+.SignInForm {
+  height: max-content;
+  width: 500px;
+  background-color: white;
+  z-index: 9999;
+  border-radius: 50px;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+}
+
+.SignInFormHeader {
+  height: max-content;
+  width: calc(100%-80px);
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 25px;
+  display: flex;
+  flex-direction: column;
+}
+
+.SignInFormHeaderTitle {
+  font-size: 30px;
+  font-family: "lorettobold";
+  white-space: pre-line;
+}
+
+.SignInFormHeaderText {
+  padding-top: 10px;
+  font-size: 15px;
+  font-family: "lorettomedium";
+  word-wrap: normal;
+  white-space: pre-line;
+}
+
+.SignInFormContents {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  padding-top: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.SignInFormInput {
+  margin: 5px;
+  height: 35px;
+  width: 80%;
+  font-size: 17px;
+  border-width: 1px;
+  border-radius: 50px;
+  border-color: black;
+  border-style: solid;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-family: "loretto";
+}
+
+.SignInFormInputCheckbox {
+  height: max-content;
+  width: 80%;
+  font-size: 15px;
+  border: none;
+  padding-left: 8px;
+  padding-right: 8px;
+  font-family: "loretto";
+}
+
+.SignInFormButton {
+  margin-top: 20px;
+  background: rgb(29,161,242);
+  background: linear-gradient(9deg, rgba(29,161,242,1) 0%, rgba(129,12,90,1) 100%);  font-size: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 35px;
+  padding-right: 35px;
+  border-radius: 50px;
+  font-size: 20px;
+  color: white;
+  font-family: "lorettosemibold";
+  cursor: pointer;
+}
+
+.SignInFormButton:hover {
+  background: linear-gradient(9deg, rgba(29,161,242,0.75) 0%, rgba(129,12,90,0.75) 100%);
+}
+
+.SignInFormCreateAccount {
+  margin-left: 5px;
+  font-family: "lorettomedium";
+  text-decoration: underline;
+  text-decoration-color: #0000EE;
+  cursor: pointer;
+  margin-bottom: 10px;
+  color: #0000EE;
+}
+
+.SignInLogo {
+  z-index: 9999;
+  position: absolute;
+  top: 20px;
+  left: 10px;
+}
+
+.AccountPage {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.AccountContainer {
+  width: 60%;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.AccountPageTopLevel {
+  width: 95%;
+  margin-left: 2.5%;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.AccountPageTitle {
+  font-size: 40px;
+  font-family: 'lorettobold';
+  color: black;
+}
+
+.AccountPageText {
+  margin-left: 10px;
+  font-size: 18px;
+  font-family: 'lorettomedium';
+  color: black;
+}
+
+.AccountPageCard {
+  height: max-content;
+  width: calc(100%-50px);
+  margin-top: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.AccountPageMediumTitle {
+  font-size: 25px;
+  font-family: 'lorettosemibold';
+  color: black;
+}
+
+.AccountPageQuotaBar {
+  width: 100%;
+  background-color: #d3d3d3;
+  height: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 50px;
+}
+
+.AccountPageQuotaBarFill {
+  height: 100%;
+  border-radius: 50px;
+  background: linear-gradient(130deg, rgba(29,161,242,1) 0%, rgba(129,12,90,1) 100%);
+  background-size: 200% 200%;
+
+  -webkit-animation: Animation 5s ease infinite;
+  -moz-animation: Animation 5s ease infinite;
+  animation: Animation 5s ease infinite;
+}
+
+.AccountPageQuotaDetails {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.AccountPageTextSimple {
+  margin-top: 5px;
+  font-size: 16px;
+  font-family: 'lorettomedium';
+  color: black;
+}
+
+.bold {
+  font-family: 'lorettobold';
+}
+
+@-webkit-keyframes Animation {
+    0%{background-position:10% 0%}
+    50%{background-position:91% 100%}
+    100%{background-position:10% 0%}
+}
+@-moz-keyframes Animation {
+    0%{background-position:10% 0%}
+    50%{background-position:91% 100%}
+    100%{background-position:10% 0%}
+}
+@keyframes Animation {
+    0%{background-position:10% 0%}
+    50%{background-position:91% 100%}
+    100%{background-position:10% 0%}
+}
+
+.AccountPageButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  width: 100%;
+  height: max-content;
+  margin-top: 10px;
+}
+
+.AccountPageButton {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin: 5px;
+  border-radius: 50px;
+  background: linear-gradient(9deg, rgba(29,161,242,1) 0%, rgba(129,12,90,1) 100%);
+  color: white;
+  font-family: 'lorettosemibold';
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.AccountPageButtonDelete {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin: 5px;
+  border-radius: 50px;
+  border-color: red;
+  color: red;
+  background-color: white;
+  border-width: 2px;
+  border-style: solid;
+  font-family: 'lorettosemibold';
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.AccountPageButtonInverse {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin: 5px;
+  border-radius: 50px;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+  background-color: white;
+  font-family: 'lorettosemibold';
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.AccountPageButtonInverseText {
+  background: linear-gradient(9deg, rgba(29,161,242,1) 0%, rgba(129,12,90,1) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.AccountPageButton:hover {
+  background: linear-gradient(9deg, rgba(29,161,242,0.75) 0%, rgba(129,12,90,0.75) 100%);
+}
+
+.AccountModalBackground {
+  position: fixed;
+  background-color: rgba(255,255,255,0.75);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.AccountModal {
+  padding-top: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 15px;
+  background-color: white;
+  border-radius: 25px;
+  max-width: 500px;
+  min-width: 300px;
+  width: 60%;
+  box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.AccountModalTitle {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  height: max-content;
+  margin-left: 50px;
+  margin-right: 50px;
+  margin-bottom: 10px;
+}
+
+.DashboardPage {
+  width: 100%;
+  height: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.DashboardContainer {
+  width: 90%;
+  height: max-content;
+  display: flex;
+  flex-direction: column;
+}
+
+.DashboardPageTopLevel {
+  width: 80%;
+  margin-left: 5.5%;
+  height: max-content;
+  display: flex;
+  justify-content: start;
+}
+
+.DashboardPageCard {
+  height: max-content;
+  width: calc(100%-50px);
+  margin-top: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 25px;
+  padding-right: 25px;
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.DashboardPageTitle {
+  font-size: 40px;
+  font-family: 'lorettobold';
+  color: black
+}
+
+.DashboardPageText {
+  margin-left: 10px;
+  font-size: 18px;
+  font-family: 'lorettomedium';
+  color: black;
+}
+
+.DashboardPageLargeTitle {
+  font-size: 35px;
+  font-family: 'lorettosemibold';
+  color: black;
+}
+
+.DashboardPageMediumTitle {
+  font-size: 20px;
+  width: 100%;
+  font-family: 'lorettosemibold';
+  color: black;
+}
+
+.DashboardPageButtonContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+  height: max-content;
+  margin-top: 5px;
+  size: 100px;
+  margin-left: 10px;
+  
+}
+
+
+
+
+/* CSS */
+.DashboardPageCommandButton {
+  background-color: #FFFFFF;
+  border: 1px solid #222222;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+  margin: 5px;
+  outline: none;
+  padding: 10px 10px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  touch-action: manipulation;
+  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  user-select: none;
+  -webkit-user-select: none;
+  width: auto;
+}
+
+.DashboardPageCommandButton:focus-visible {
+  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+  transition: box-shadow .2s;
+}
+
+.DashboardPageCommandButton:active {
+  background-color: #F7F7F7;
+  border-color: #000000;
+  transform: scale(.96);
+}
+
+.DashboardPageCommandButton:hover {
+  background-color: #222222;
+  color: white;
+
+
+}
+
+.DashboardPageButtonPlus{
+  border: solid 2px black;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  
+}
+
+
+.DashboardPageButtonPlus:hover{
+  color: white;
+  background-color: black;
+}
+
+.DashboardPageButton {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 25px;
+  padding-right: 25px;
+  margin: 5px;
+  border-radius: 50px;
+  border-color: black;
+  border-width: 1px;
+  border-style: solid;
+  background-color: white;
+  font-family: 'lorettosemibold';
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.DashboardPageButton:hover{
+  color: white;
+  background-color: black;
+}
+
+
+
+
+
+
+@media only screen and (max-width: 1135px) {
+  .TextArea {
+    width: 600px;
+  }
+  .AccountContainer {
+    width: 80%;
+  }
+  .AccountPageTopLevel {
+    width: 90%;
+    margin-left: 2.5%;
+  }
+}
+
+@media only screen and (max-width: 910px) {
+  .TextArea {
+    width: 500px;
+  }
+  .AccountContainer {
+    width: 80%;
+  }
+  .AccountPageTopLevel {
+    width: 90%;
+    margin-left: 2.5%;
+  }
+}
+
+@media only screen and (max-width: 785px) {
+  .TextArea {
+    width: 400px;
+  }
+  .AccountContainer {
+    width: 90%;
+  }
+  .AccountPageTopLevel {
+    width: 95%;
+    margin-left: 2.5%;
+  }
+}
+
+@media only screen and (max-width: 680px) {
+  .TextArea {
+    width: 80%;
+  }
+
+  .Tool {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .Workspace {
+    height: max-content;
+  }
+
+  .HistoryBar {
+    width: 100%;
+    height: max-content;
+    margin-bottom: 100px;
+  }
+
+  .showOnlyOnMobile {
+    display: flex;
+  }
+
+  .hideOnMobile {
+    display: none;
+  }
+  .AccountContainer {
+    width: 95%;
+  }
+  .AccountPageTopLevel {
+    width: 100%;
+    margin-left: 0;
+  }
+
+}
