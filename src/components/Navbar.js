@@ -56,7 +56,7 @@ function Navbar(props) {
         </div>
         {menuIsOpen && <div ref={listRef} className="UserList">
         {(props.isAccount  ) && <div onClick={() => navigateToScreen("dashboard")} className="UserListItem noselect">Dashboard</div>}
-          {(props.isAccount ) && <div onClick={() => navigateToScreen("tool/new")} className="UserListItem noselect">Tool</div>}
+          {(props.isAccount  ) && <div onClick={() => navigateToScreen("tool/new")} className="UserListItem noselect">Tool</div>}
           {(props.isAccount ) && <div onClick={() => navigateToScreen("account")} className="UserListItem noselect">Account</div>}
           <div onClick={() => navigateToScreen("support")} className="UserListItem noselect">Support</div>
           <div onClick={() => navigateToScreen("signout")} className="UserListItem noselect">Sign out</div>

@@ -8,11 +8,39 @@ import LoadingIcons from "react-loading-icons";
 import toast, { Toaster } from "react-hot-toast";
 import { render } from "@testing-library/react";
 
+
 function Dashboard(props) {
   // State Variables
   const [user, setUser] = useState({});
   const [commands, setCommands] = useState([{}]);
-  const [connectedServices, setConnectedServices] = useState([{}]);
+  const [connectedServices, setConnectedServices] = useState([
+    
+    {
+      serviceId: 1,
+      serviceName: "Github",
+      image: require("../images/github.png")
+  
+    },
+    {
+      serviceId: 2,
+      serviceName: "Notion",
+      image: require("../images/notion.png")
+    },
+
+    {
+      serviceId: 3,
+      serviceName: "Google",
+      image: require("../images/google.jpg")
+    },
+    {
+      serviceId: 4,
+      serviceName: "Other",
+      image: require("../images/other.png")
+    }
+
+  
+  
+  ]);
   const [SelectFields, setSelectField] = useState([{}]);
   const [makeup, setMakeup] = useState([]);
   const [commandTitle, setCommandTitle] = useState("");
@@ -20,11 +48,14 @@ function Dashboard(props) {
 
   // Boolean State Variables
   const [addCommandIsOpen, setAddCommandIsOpen] = useState(false);
-  const [addConnectedServiceIsOpen, setAddConnectedServiceIsOpen] =
-    useState(false);
+  const [addConnectedServiceIsOpen, setAddConnectedServiceIsOpen] =useState(false);
   const [addEdit, setAddEdit] = useState(false);
   const [isCallingAPI, setIsCallingAPI] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [deleteClicked, setDeleteClicked] = useState(false);
+
+
+  // References
   const addCommandRef = useRef(null);
 
   //1.  Grabs User data
@@ -34,6 +65,7 @@ function Dashboard(props) {
       setUser(JSON.parse(userContext.data));
     }
 
+    // Fetches All User commands
     const userCommands = await CallAPI("gw/commands/fetch/all", "GET", "");
     if (userCommands.success) {
       setCommands(JSON.parse(userCommands.data));
@@ -41,9 +73,11 @@ function Dashboard(props) {
       onCommandTitleChange("");
     }
 
+    // Fetch Service Data
     const connectedServices = await CallAPI("gw/services/fetch/all", "GET", "");
     if (connectedServices.success) {
-      setConnectedServices(JSON.parse(connectedServices.data));
+     // setConnectedServices(JSON.parse(connectedServices.data));
+      console.log(JSON.parse(connectedServices.data));
     }
   
 
@@ -196,6 +230,7 @@ function Dashboard(props) {
 
     toggleAddCommand(false);
     toggleEditCommand(false);
+    toggleDeleteButton(false);
     setIsCallingAPI(false);
   };
 
@@ -228,6 +263,9 @@ function Dashboard(props) {
       setAddCommandIsOpen(true);
       document.addEventListener("mousedown", handleClickOutside);
     } else {
+      if (deleteClicked === true){
+        toggleDeleteButton(false);
+      }
       makeRequest();
       setAddCommandIsOpen(false);
       document.removeEventListener("mousedown", handleClickOutside);
@@ -255,20 +293,32 @@ function Dashboard(props) {
     }
   };
 
+  const toggleDeleteButton = (open) => {
+    if (open) {
+      setDeleteClicked(true);
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      setDeleteClicked(false);
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+  };
+
   const renderSelectedFields = () => {
     return SelectFields.map((data, index) => {
       return (
-        <div className="col-2 p-0" key={index}>
+        <div className="col-2 p-0 m-2" key={index}>
           <select
-            className="form-select"
+            className="form-select m-2"
             id={"selectedOption-" + index}
             defaultValue={data}
+     
           >
             {commands.map((dataCommands, indexCommands) => {
               return (
                 <option
                   id={"option-" + indexCommands + "-" + dataCommands.commandId}
                   key={indexCommands}
+                 className="m-2"
                   value={dataCommands.commandId}
                 >
                   {dataCommands.commandName}
@@ -295,7 +345,7 @@ function Dashboard(props) {
             onClick={() => makeIdRequest(data.commandId)}
             id={"commandButton-" + index}
             type="button"
-            className="DashboardPageCommandButton "
+            className="DashboardPageCommandButton p-2 "
           >
             {data.commandName}
           </button>
@@ -306,21 +356,21 @@ function Dashboard(props) {
 
   const renderConnectedServices = () => {
     return connectedServices.map((data, index) => {
-      console.log(data);
       return (
         <div className="col-2 d-flex align-items-center" key={index}>
           <button
             id={"serviceButton-" + index}
             type="button"
-            className="DashboardPageServiceButton "
+            className= 'DashboardPageCommandButton'
           >
-            <img src={data.image}></img>
+            <img className="DashboardServicesImg" src={data.image}></img>
             {data.serviceName}
           </button>
         </div>
       );
     });
   };
+
 
   useEffect(() => {
     makeRequest();
@@ -351,13 +401,13 @@ function Dashboard(props) {
           <div className="container">
             <div className="row align-items-center">
               <div className="col-12 d-flex align-items-center ">
-                <span className="DashboardPageTitle m-3">Commands </span>
-                <span
+                <span className="DashboardPageTitle m-2">Commands </span>
+                <button
                   onClick={() => toggleAddCommand(true)}
-                  className="DashboardPageButtonPlus noselect"
+                  className=" noselect DashboardPageCommandButton"
                 >
                   +
-                </span>
+                </button>
               </div>
             </div>
             <div className="row align-items-center">
@@ -375,12 +425,6 @@ function Dashboard(props) {
               <div className="col-12 d-flex align-items-center">
                 <span className="DashboardPageTitle m-3">
                   Connected Services{" "}
-                </span>
-                <span
-                  onClick={() => toggleConnectedServices(true)}
-                  className="DashboardPageButtonPlus noselect"
-                >
-                  +
                 </span>
               </div>
             </div>
@@ -418,7 +462,7 @@ function Dashboard(props) {
                   value={commandTitle}
                   onChange={(e) => onCommandTitleChange(e.target.value)}
                   placeholder={"Command Title"}
-                  className="DashboardInput"
+                  className="DashboardInput input-group-text "
                 ></input>
               </div>
               <div className="col-12">
@@ -452,18 +496,27 @@ function Dashboard(props) {
               </div>
             </div>
             <div className="row">
+              {deleteClicked && (
+               <div className="d-flex align-items-center justify-content-between  alert alert-danger m-2" role="alert">
+              Are you sure you want to delete this command?
+              <div> 
+              <button className="btn btn-danger m-2 " onClick={() => deleteUserCommand()}> Yes </button>
+              <button className="btn btn-success m-2 " onClick={() => toggleDeleteButton(false)}> No </button>
+            </div>
+             </div>
+              )}
               <div className="col-12">
                 <div className="AccountPageButtonContainer">
                   {addEdit && (
                     <div
-                      onClick={() => deleteUserCommand()}
+                      onClick={() => toggleDeleteButton(true)}
                       className="DashboardPageButton noselect"
                     >
                       Delete
                     </div>
                   )}
                   <div
-                    onClick={() => toggleAddCommand(false)}
+                    onClick={ () => toggleAddCommand(false)}
                     className="DashboardPageButton noselect"
                   >
                     Cancel
