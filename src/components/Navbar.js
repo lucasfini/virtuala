@@ -55,8 +55,9 @@ function Navbar(props) {
           </span>
         </div>
         {menuIsOpen && <div ref={listRef} className="UserList">
-          {(props.isAccount) && <div onClick={() => navigateToScreen("tool/new")} className="UserListItem noselect">Tool</div>}
-          {(props.isAccount === undefined) && <div onClick={() => navigateToScreen("account")} className="UserListItem noselect">Account</div>}
+        {(props.isAccount  ) && <div onClick={() => navigateToScreen("dashboard")} className="UserListItem noselect">Dashboard</div>}
+          {(props.isAccount ) && <div onClick={() => navigateToScreen("tool/new")} className="UserListItem noselect">Tool</div>}
+          {(props.isAccount ) && <div onClick={() => navigateToScreen("account")} className="UserListItem noselect">Account</div>}
           <div onClick={() => navigateToScreen("support")} className="UserListItem noselect">Support</div>
           <div onClick={() => navigateToScreen("signout")} className="UserListItem noselect">Sign out</div>
         </div>}
@@ -70,10 +71,13 @@ function Navbar(props) {
           isExpandable={false}
           containerClassName={"SheetModal"}>
             <div ref={listRefMobile} className="MobileMenu">
+              {(props.isAccount) && <div onClick={() => navigateToScreen("dashboard")} className="MobileMenuItem noselect">
+                <FontAwesomeIcon icon={solid('Robot')} style={{color: "black", fontSize: 20}} /> Dasboard
+              </div>}
               {(props.isAccount) && <div onClick={() => navigateToScreen("tool/new")} className="MobileMenuItem noselect">
                 <FontAwesomeIcon icon={solid('Robot')} style={{color: "black", fontSize: 20}} /> Tool
               </div>}
-              {(props.isAccount === undefined) && <div onClick={() => navigateToScreen("account")} className="MobileMenuItem noselect">
+              {(props.isAccount ) && <div onClick={() => navigateToScreen("account")} className="MobileMenuItem noselect">
                 <FontAwesomeIcon icon={solid('User')} style={{color: "black", fontSize: 20}} /> Account
               </div>}
               <div onClick={() => navigateToScreen("support")} className="MobileMenuItem noselect">

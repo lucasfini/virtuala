@@ -9,17 +9,23 @@ import toast, { Toaster } from "react-hot-toast";
 import { render } from "@testing-library/react";
 
 function Dashboard(props) {
+  // State Variables
   const [user, setUser] = useState({});
   const [commands, setCommands] = useState([{}]);
+  const [connectedServices, setConnectedServices] = useState([{}]);
   const [SelectFields, setSelectField] = useState([{}]);
-  const [addCommandIsOpen, setAddCommandIsOpen] = useState(false);
   const [makeup, setMakeup] = useState([]);
-  const [addDeleteButton, setAddDeleteButton] = useState(false);
+  const [commandTitle, setCommandTitle] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+
+  // Boolean State Variables
+  const [addCommandIsOpen, setAddCommandIsOpen] = useState(false);
+  const [addConnectedServiceIsOpen, setAddConnectedServiceIsOpen] =
+    useState(false);
+  const [addEdit, setAddEdit] = useState(false);
   const [isCallingAPI, setIsCallingAPI] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [commandTitle, setCommandTitle] = useState("");
   const addCommandRef = useRef(null);
-
 
   //1.  Grabs User data
   const makeRequest = async () => {
@@ -31,31 +37,39 @@ function Dashboard(props) {
     const userCommands = await CallAPI("gw/commands/fetch/all", "GET", "");
     if (userCommands.success) {
       setCommands(JSON.parse(userCommands.data));
+      setSelectField([{}]);
+      onCommandTitleChange("");
     }
 
+    const connectedServices = await CallAPI("gw/services/fetch/all", "GET", "");
+    if (connectedServices.success) {
+      setConnectedServices(JSON.parse(connectedServices.data));
+    }
+  
+
+    const history = await CallAPI("gw/history/fetch", "GET", "");
+    if (history.success) {
+      console.log(history.data);
+    }
   };
-
-  const makeIdRequest = async (id) =>{
-
-
+  // GET request for specific Command
+  const makeIdRequest = async (id) => {
     const userMakeup = await CallAPI("gw/commands/fetch/" + id, "GET", "");
-    var selectedFields = []
+    var selectedFields = [];
     if (userMakeup.success) {
       console.log(userMakeup.data);
-        setMakeup(JSON.parse(userMakeup.data));
-        const make = (JSON.parse(userMakeup.data).makeup.split(','));
-        for (var j = 0; j < make.length; j++) {
-          selectedFields.push(make[j])
-        }
-        setSelectField(selectedFields)
-  }
+      setMakeup(JSON.parse(userMakeup.data));
+      const make = JSON.parse(userMakeup.data).makeup.split(",");
+      for (var j = 0; j < make.length; j++) {
+        selectedFields.push(make[j]);
+      }
+      setSelectField(selectedFields);
+    }
 
-  setIsEditing(true);
+    setIsEditing(true);
+  };
 
-
-}
-
-  //2. Create command Function
+  //2. Create User Command
   const createUserCommands = async () => {
     var markup = "";
 
@@ -100,17 +114,89 @@ function Dashboard(props) {
 
   //3.  Edit Command Function
   const editUserCommand = () => {
+    onCommandTitleChange(makeup.commandName);
+    toggleAddCommand(true);
+    toggleEditCommand(true);
+
+    // const resp = await CallAPI("/gw/commands/edit", "POST", fd);
+  };
+
+  // 3.1 Complete User Command Edit
+  const completeEdit = async () => {
+    var markup = "";
+
     if (isCallingAPI) {
       return;
     }
-    setIsCallingAPI(true);
-    onCommandTitleChange(makeup.commandName);
-    toggleAddCommand(true);
-    toggleDeleteCommand(true);
 
-    setIsEditing(false);
+    setIsCallingAPI(true);
+
+    for (var x = 0; x < SelectFields.length; x++) {
+      var pickedOption = document.getElementById("selectedOption-" + x).value;
+      markup += pickedOption + ",";
+    }
+    markup = markup.slice(0, -1);
+
+    var body = {
+      commandId: makeup.commandId,
+      commandName: document.getElementById("command_title").value,
+      markup: markup,
+    };
+
+    var fd = new FormData();
+    fd.append("commandName", body.commandName);
+    fd.append("makeup", body.markup);
+    fd.append("commandId", body.commandId);
+
+    const resp = await CallAPI("/gw/commands/edit", "POST", fd);
+
+    console.log(resp);
+
+    if (resp.success) {
+      toast(resp.message);
+      makeRequest();
+      toggleAddCommand(false);
+    } else {
+      if (resp.message == "Unauthorized.") {
+        toast("Command cannot Edit");
+      } else {
+        toast(resp.message);
+      }
+    }
     setIsCallingAPI(false);
-    // const resp = await CallAPI("/gw/commands/edit", "POST", fd);
+    setIsEditing(false);
+  };
+
+  //4. Delete User Commands
+  const deleteUserCommand = async () => {
+    if (isCallingAPI) {
+      return;
+    }
+
+    setIsCallingAPI(true);
+
+    var fd = new FormData();
+    fd.append("commandId", makeup.commandId);
+
+    const resp = await CallAPI("gw/commands/delete/", "POST", fd);
+
+    if (resp.success) {
+      toast(resp.message);
+      makeRequest();
+      toggleAddCommand(false);
+    } else {
+      if (resp.message == "Unauthorized.") {
+        toast("Command cannot Delete");
+      } else {
+        toast(resp.message);
+      }
+    }
+
+    makeRequest();
+
+    toggleAddCommand(false);
+    toggleEditCommand(false);
+    setIsCallingAPI(false);
   };
 
   const addSelectField = () => {
@@ -119,33 +205,6 @@ function Dashboard(props) {
 
   const onCommandTitleChange = (value) => {
     setCommandTitle(value);
-  };
-
-  const onSetMakeup = (value) => {
-    setMakeup((e) => [...e, { options: value }]);
-  };
-
-  const completeEdit = async (makeup) => {};
-
-  const deleteUserCommand = async () => {
-    if (isCallingAPI) {
-      return;
-    }
-
-    setIsCallingAPI(true);
-    var commandId = localStorage.getItem("id");
-
-    var fd = new FormData();
-    fd.append("commandId", commandId);
-
-    const userDelete = await CallAPI("gw/commands/delete/", "POST", fd);
-    if (userDelete.success) {
-      makeRequest();
-      toggleAddCommand(false);
-      toggleDeleteCommand(false);
-    }
-
-    setIsCallingAPI(false);
   };
 
   const removeoptionFields = (index) => {
@@ -175,24 +234,36 @@ function Dashboard(props) {
     }
   };
 
-  const toggleDeleteCommand = (open) => {
+  const toggleConnectedServices = (open) => {
     if (open) {
-      setAddDeleteButton(true);
+      setAddConnectedServiceIsOpen(true);
       document.addEventListener("mousedown", handleClickOutside);
     } else {
-      setAddDeleteButton(false);
+      makeRequest();
+      setAddConnectedServiceIsOpen(false);
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+  };
+
+  const toggleEditCommand = (open) => {
+    if (open) {
+      setAddEdit(true);
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      setAddEdit(false);
       document.removeEventListener("mousedown", handleClickOutside);
     }
   };
 
   const renderSelectedFields = () => {
-
-
     return SelectFields.map((data, index) => {
-      console.log(data);
       return (
         <div className="col-2 p-0" key={index}>
-          <select className="form-select" id={"selectedOption-" + index} defaultValue={data}>
+          <select
+            className="form-select"
+            id={"selectedOption-" + index}
+            defaultValue={data}
+          >
             {commands.map((dataCommands, indexCommands) => {
               return (
                 <option
@@ -210,24 +281,56 @@ function Dashboard(props) {
     });
   };
 
+  const renderCommandList = () => {
+    return commands.filter((val)=> {
+      if (searchInput == ""){
+        return val
+      }else if (val.commandName.toLowerCase().includes(searchInput.toLowerCase())){
+        return val
+      }
+    }).map((data, index) => {
+      return (
+        <div className="col-2 d-flex align-items-center" key={index}>
+          <button
+            onClick={() => makeIdRequest(data.commandId)}
+            id={"commandButton-" + index}
+            type="button"
+            className="DashboardPageCommandButton "
+          >
+            {data.commandName}
+          </button>
+        </div>
+      );
+    });
+  };
+
+  const renderConnectedServices = () => {
+    return connectedServices.map((data, index) => {
+      console.log(data);
+      return (
+        <div className="col-2 d-flex align-items-center" key={index}>
+          <button
+            id={"serviceButton-" + index}
+            type="button"
+            className="DashboardPageServiceButton "
+          >
+            <img src={data.image}></img>
+            {data.serviceName}
+          </button>
+        </div>
+      );
+    });
+  };
+
   useEffect(() => {
     makeRequest();
-
   }, []);
 
-
-  useEffect(() =>{
-   console.log(makeup);
-   console.log(SelectFields);
-
-    if (isEditing == true)
-    {
+  useEffect(() => {
+    if (isEditing == true) {
       editUserCommand();
     }
-
-
-
-  },[makeup]);
+  }, [makeup]);
 
   return (
     <div className="App">
@@ -244,7 +347,7 @@ function Dashboard(props) {
       />
       <Navbar isAccount name={user.firstname + " " + user.lastname} />
       <div className="DashboardPage">
-        {!addCommandIsOpen && (
+        {!addCommandIsOpen && !addConnectedServiceIsOpen && (
           <div className="container">
             <div className="row align-items-center">
               <div className="col-12 d-flex align-items-center ">
@@ -258,29 +361,39 @@ function Dashboard(props) {
               </div>
             </div>
             <div className="row align-items-center">
-              {commands.map((data, index) => {
-                return (
-                  <div className="col-2 d-flex align-items-center" key={index}>
-                    <button
-                      onClick={() => makeIdRequest(data.commandId)}
-                      id={"commandButton-" + index}
-                      type="button"
-                      className="DashboardPageCommandButton "
-                    >
-                      {data.commandName}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="row">
-              <div className="col-12">
-                <span className="DashboardPageTitle"> Connected Services</span>
+              <div className="col-4 d-flex align-items-center ">
+                <input
+                  type="text"
+                  className="m-2 input-group-text "
+                  placeholder="Search here"
+                  onChange={(event) => setSearchInput(event.target.value)}
+                />
               </div>
+            </div>
+            <div className="row align-items-center">{renderCommandList()}</div>
+            <div className="row align-items-center">
+              <div className="col-12 d-flex align-items-center">
+                <span className="DashboardPageTitle m-3">
+                  Connected Services{" "}
+                </span>
+                <span
+                  onClick={() => toggleConnectedServices(true)}
+                  className="DashboardPageButtonPlus noselect"
+                >
+                  +
+                </span>
+              </div>
+            </div>
+            <div className="row align-items-center">
+              {renderConnectedServices()}
             </div>
           </div>
         )}
-
+        {addConnectedServiceIsOpen && (
+          <div>
+              
+          </div>
+        )}
         {addCommandIsOpen && (
           <div className="container">
             <div className="row align-items-center">
@@ -341,7 +454,7 @@ function Dashboard(props) {
             <div className="row">
               <div className="col-12">
                 <div className="AccountPageButtonContainer">
-                  {addDeleteButton && (
+                  {addEdit && (
                     <div
                       onClick={() => deleteUserCommand()}
                       className="DashboardPageButton noselect"
@@ -355,20 +468,38 @@ function Dashboard(props) {
                   >
                     Cancel
                   </div>
-                  <div
-                    onClick={() => createUserCommands()}
-                    className="DashboardPageButton noselect"
-                  >
-                    {isCallingAPI ? (
-                      <LoadingIcons.TailSpin
-                        stroke="#fff"
-                        fill="#fff"
-                        style={{ height: 18 }}
-                      />
-                    ) : (
-                      "Confirm"
-                    )}
-                  </div>
+                  {addEdit && (
+                    <div
+                      onClick={() => completeEdit()}
+                      className="DashboardPageButton noselect"
+                    >
+                      {isCallingAPI ? (
+                        <LoadingIcons.TailSpin
+                          stroke="#fff"
+                          fill="#fff"
+                          style={{ height: 18 }}
+                        />
+                      ) : (
+                        "Edit"
+                      )}
+                    </div>
+                  )}
+                  {!addEdit && (
+                    <div
+                      onClick={() => createUserCommands()}
+                      className="DashboardPageButton noselect"
+                    >
+                      {isCallingAPI ? (
+                        <LoadingIcons.TailSpin
+                          stroke="#fff"
+                          fill="#fff"
+                          style={{ height: 18 }}
+                        />
+                      ) : (
+                        "Confirm"
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
