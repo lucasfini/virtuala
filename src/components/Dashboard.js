@@ -7,39 +7,34 @@ import { CallAPI } from "../utilities/networking";
 import LoadingIcons from "react-loading-icons";
 import toast, { Toaster } from "react-hot-toast";
 import { render } from "@testing-library/react";
-
+import Footer from "../components/Footer";
 
 function Dashboard(props) {
   // State Variables
   const [user, setUser] = useState({});
   const [commands, setCommands] = useState([{}]);
   const [connectedServices, setConnectedServices] = useState([
-    
     {
       serviceId: 1,
       serviceName: "Github",
-      image: require("../images/github.png")
-  
+      image: require("../images/github.png"),
     },
     {
       serviceId: 2,
       serviceName: "Notion",
-      image: require("../images/notion.png")
+      image: require("../images/notion.png"),
     },
 
     {
       serviceId: 3,
       serviceName: "Google",
-      image: require("../images/google.jpg")
+      image: require("../images/google.png"),
     },
     {
       serviceId: 4,
       serviceName: "Other",
-      image: require("../images/other.png")
-    }
-
-  
-  
+      image: require("../images/other.png"),
+    },
   ]);
   const [SelectFields, setSelectField] = useState([{}]);
   const [makeup, setMakeup] = useState([]);
@@ -48,12 +43,12 @@ function Dashboard(props) {
 
   // Boolean State Variables
   const [addCommandIsOpen, setAddCommandIsOpen] = useState(false);
-  const [addConnectedServiceIsOpen, setAddConnectedServiceIsOpen] =useState(false);
+  const [addConnectedServiceIsOpen, setAddConnectedServiceIsOpen] =
+    useState(false);
   const [addEdit, setAddEdit] = useState(false);
   const [isCallingAPI, setIsCallingAPI] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [deleteClicked, setDeleteClicked] = useState(false);
-
 
   // References
   const addCommandRef = useRef(null);
@@ -76,28 +71,30 @@ function Dashboard(props) {
     // Fetch Service Data
     const connectedServices = await CallAPI("gw/services/fetch/all", "GET", "");
     if (connectedServices.success) {
-     // setConnectedServices(JSON.parse(connectedServices.data));
+      //  setConnectedServices(JSON.parse(connectedServices.data));
       console.log(JSON.parse(connectedServices.data));
     }
-  
 
     const history = await CallAPI("gw/history/fetch", "GET", "");
     if (history.success) {
-      console.log(history.data);
+      console.log(history);
     }
   };
   // GET request for specific Command
   const makeIdRequest = async (id) => {
-    const userMakeup = await CallAPI("gw/commands/fetch/" + id, "GET", "");
+    const resp = await CallAPI("gw/commands/fetch/" + id, "GET", "");
     var selectedFields = [];
-    if (userMakeup.success) {
-      console.log(userMakeup.data);
-      setMakeup(JSON.parse(userMakeup.data));
-      const make = JSON.parse(userMakeup.data).makeup.split(",");
+    if (resp.data === "null") {
+      toast("Cannot Open Default Command");
+    } else if (resp.success) {
+      setMakeup(JSON.parse(resp.data));
+      const make = JSON.parse(resp.data).makeup.split(",");
       for (var j = 0; j < make.length; j++) {
         selectedFields.push(make[j]);
       }
       setSelectField(selectedFields);
+    } else {
+      toast("Error: Cannot Open ");
     }
 
     setIsEditing(true);
@@ -151,8 +148,6 @@ function Dashboard(props) {
     onCommandTitleChange(makeup.commandName);
     toggleAddCommand(true);
     toggleEditCommand(true);
-
-    // const resp = await CallAPI("/gw/commands/edit", "POST", fd);
   };
 
   // 3.1 Complete User Command Edit
@@ -263,7 +258,7 @@ function Dashboard(props) {
       setAddCommandIsOpen(true);
       document.addEventListener("mousedown", handleClickOutside);
     } else {
-      if (deleteClicked === true){
+      if (deleteClicked === true) {
         toggleDeleteButton(false);
       }
       makeRequest();
@@ -303,6 +298,7 @@ function Dashboard(props) {
     }
   };
 
+  // Shows List of all selected options in a specific command.
   const renderSelectedFields = () => {
     return SelectFields.map((data, index) => {
       return (
@@ -311,14 +307,13 @@ function Dashboard(props) {
             className="form-select m-2"
             id={"selectedOption-" + index}
             defaultValue={data}
-     
           >
             {commands.map((dataCommands, indexCommands) => {
               return (
                 <option
                   id={"option-" + indexCommands + "-" + dataCommands.commandId}
                   key={indexCommands}
-                 className="m-2"
+                  className="m-2"
                   value={dataCommands.commandId}
                 >
                   {dataCommands.commandName}
@@ -331,46 +326,59 @@ function Dashboard(props) {
     });
   };
 
+  // Shows List of ALL Commands
   const renderCommandList = () => {
-    return commands.filter((val)=> {
-      if (searchInput == ""){
-        return val
-      }else if (val.commandName.toLowerCase().includes(searchInput.toLowerCase())){
-        return val
-      }
-    }).map((data, index) => {
-      return (
-        <div className="col-2 d-flex align-items-center" key={index}>
-          <button
-            onClick={() => makeIdRequest(data.commandId)}
-            id={"commandButton-" + index}
-            type="button"
-            className="DashboardPageCommandButton p-2 "
+    return commands
+      .filter((val) => {
+        if (searchInput == "") {
+          return val;
+        } else if (
+          val.commandName.toLowerCase().includes(searchInput.toLowerCase())
+        ) {
+          return val;
+        }
+      })
+      .map((data, index) => {
+        return (
+          <div
+            className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2  d-flex align-items-center justify-content-center"
+            key={index}
           >
-            {data.commandName}
-          </button>
-        </div>
-      );
-    });
+            <button
+              onClick={() => makeIdRequest(data.commandId)}
+              id={"commandButton-" + index}
+              type="button"
+              className="DashboardPageCommandButton p-2 "
+            >
+              {data.commandName}
+            </button>
+          </div>
+        );
+      });
   };
 
+  // Shows List of ALL Services, connected and disconnected
   const renderConnectedServices = () => {
     return connectedServices.map((data, index) => {
       return (
-        <div className="col-2 d-flex align-items-center" key={index}>
+        <div
+          className="col-12 col-sm-6 col-md-2 col-lg-2 col-xl-1  m-3  d-flex align-items-center justify-content-center "
+          key={index}
+        >
           <button
             id={"serviceButton-" + index}
             type="button"
-            className= 'DashboardPageCommandButton'
+            className="DashboardPageServiceButton"
           >
-            <img className="DashboardServicesImg" src={data.image}></img>
-            {data.serviceName}
+            <div className="col-12">
+              <img className="DashboardPageServicesImg" src={data.image}></img>
+            </div>
+            <div className="col-12">{data.serviceName}</div>
           </button>
         </div>
       );
     });
   };
-
 
   useEffect(() => {
     makeRequest();
@@ -400,27 +408,33 @@ function Dashboard(props) {
         {!addCommandIsOpen && !addConnectedServiceIsOpen && (
           <div className="container">
             <div className="row align-items-center">
-              <div className="col-12 d-flex align-items-center ">
+              <div className="col-12 col-sm-12 col-md-12 col-lg-12 d-flex align-items-center ">
                 <span className="DashboardPageTitle m-2">Commands </span>
-                <button
-                  onClick={() => toggleAddCommand(true)}
-                  className=" noselect DashboardPageCommandButton"
-                >
-                  +
-                </button>
               </div>
             </div>
-            <div className="row align-items-center">
-              <div className="col-4 d-flex align-items-center ">
-                <input
-                  type="text"
-                  className="m-2 input-group-text "
-                  placeholder="Search here"
-                  onChange={(event) => setSearchInput(event.target.value)}
-                />
+            <div className="DashboardPageCommandBox">
+              <div className="row align-items-center">
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 d-flex align-items-center justify-content-center ">
+                  <input
+                    type="text"
+                    className="input-group-text DashboardPageSearchInput "
+                    placeholder="Search Command"
+                    onChange={(event) => setSearchInput(event.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="row align-items-center">
+                {renderCommandList()}
+                <div className="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2  d-flex align-items-center justify-content-center ">
+                  <button
+                    onClick={() => toggleAddCommand(true)}
+                    className=" noselect DashboardPageAddCommandButton p-2"
+                  >
+                    Add Command
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="row align-items-center">{renderCommandList()}</div>
             <div className="row align-items-center">
               <div className="col-12 d-flex align-items-center">
                 <span className="DashboardPageTitle m-3">
@@ -428,16 +442,14 @@ function Dashboard(props) {
                 </span>
               </div>
             </div>
-            <div className="row align-items-center">
-              {renderConnectedServices()}
+            <div className="DashboardPageCommandBox">
+              <div className="row align-items-center">
+                {renderConnectedServices()}
+              </div>
             </div>
           </div>
         )}
-        {addConnectedServiceIsOpen && (
-          <div>
-              
-          </div>
-        )}
+        {addConnectedServiceIsOpen && <div></div>}
         {addCommandIsOpen && (
           <div className="container">
             <div className="row align-items-center">
@@ -462,7 +474,7 @@ function Dashboard(props) {
                   value={commandTitle}
                   onChange={(e) => onCommandTitleChange(e.target.value)}
                   placeholder={"Command Title"}
-                  className="DashboardInput input-group-text "
+                  className=" input-group-text "
                 ></input>
               </div>
               <div className="col-12">
@@ -497,34 +509,49 @@ function Dashboard(props) {
             </div>
             <div className="row">
               {deleteClicked && (
-               <div className="d-flex align-items-center justify-content-between  alert alert-danger m-2" role="alert">
-              Are you sure you want to delete this command?
-              <div> 
-              <button className="btn btn-danger m-2 " onClick={() => deleteUserCommand()}> Yes </button>
-              <button className="btn btn-success m-2 " onClick={() => toggleDeleteButton(false)}> No </button>
-            </div>
-             </div>
+                <div
+                  className="d-flex align-items-center justify-content-between  alert alert-danger m-2"
+                  role="alert"
+                >
+                  Are you sure you want to delete this command?
+                  <div>
+                    <button
+                      className="btn btn-danger m-2 "
+                      onClick={() => deleteUserCommand()}
+                    >
+                      {" "}
+                      Yes{" "}
+                    </button>
+                    <button
+                      className="btn btn-success m-2 "
+                      onClick={() => toggleDeleteButton(false)}
+                    >
+                      {" "}
+                      No{" "}
+                    </button>
+                  </div>
+                </div>
               )}
               <div className="col-12">
                 <div className="AccountPageButtonContainer">
                   {addEdit && (
                     <div
                       onClick={() => toggleDeleteButton(true)}
-                      className="DashboardPageButton noselect"
+                      className="DashboardPageActionButton noselect"
                     >
                       Delete
                     </div>
                   )}
                   <div
-                    onClick={ () => toggleAddCommand(false)}
-                    className="DashboardPageButton noselect"
+                    onClick={() => toggleAddCommand(false)}
+                    className="DashboardPageActionButton noselect"
                   >
                     Cancel
                   </div>
                   {addEdit && (
                     <div
                       onClick={() => completeEdit()}
-                      className="DashboardPageButton noselect"
+                      className="DashboardPageActionButton noselect"
                     >
                       {isCallingAPI ? (
                         <LoadingIcons.TailSpin
@@ -540,7 +567,7 @@ function Dashboard(props) {
                   {!addEdit && (
                     <div
                       onClick={() => createUserCommands()}
-                      className="DashboardPageButton noselect"
+                      className="DashboardPageActionButton noselect"
                     >
                       {isCallingAPI ? (
                         <LoadingIcons.TailSpin
@@ -558,6 +585,7 @@ function Dashboard(props) {
             </div>
           </div>
         )}
+        <Footer />
       </div>
     </div>
   );

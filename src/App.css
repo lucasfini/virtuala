@@ -1,9 +1,10 @@
+
+
 .App {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
   overflow-x: hidden;
+width: 100%;
+display: block;
 }
 
 .Tool {
@@ -876,10 +877,8 @@ textarea:focus, input:focus{
 
 .DashboardPage {
   width: 100%;
-  height: max-content;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100%;
+  background-color: #FCFFFF;
 }
 
 .DashboardContainer {
@@ -887,6 +886,16 @@ textarea:focus, input:focus{
   height: max-content;
   display: flex;
   flex-direction: column;
+}
+
+
+
+.DashboardPageCommandBox{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;
+  background-color: white;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding:  20px 10px ;
 }
 
 .DashboardPageTopLevel {
@@ -912,9 +921,10 @@ textarea:focus, input:focus{
 }
 
 .DashboardPageTitle {
-  font-size: 40px;
-  font-family: 'lorettobold';
-  color: black
+  font-size: 35px;
+  font-family: 'lorettolight';
+  color: #CBCDD3;
+
 }
 
 .DashboardPageText {
@@ -949,25 +959,27 @@ textarea:focus, input:focus{
   
 }
 
+.DashboardPageSearchInput{
+  max-width: 180px;
+  margin: 5px;
+  line-height: 20px;
+  padding: 2px;
+}
 
-
-
-/* CSS */
-.DashboardPageCommandButton {
-  background-color: #FFFFFF;
+.DashboardPageAddCommandButton {
+  background-color: #222222;
   border: 1px solid #222222;
   border-radius: 8px;
   box-sizing: border-box;
-  color: #222222;
+  color: #ffffff;
   cursor: pointer;
   display: inline-block;
-  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
-  font-size: 16px;
-  font-weight: 600;
+  font-family: lorettoregular;
+  font-size: 20px;
   line-height: 20px;
   margin: 5px;
   outline: none;
-  padding: 5px 10px;
+  min-width: 180px;
   position: relative;
   text-align: center;
   text-decoration: none;
@@ -975,25 +987,55 @@ textarea:focus, input:focus{
   transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
   user-select: none;
   -webkit-user-select: none;
-  width: auto;
+
 }
 
-.DashboardPageCommandButton:focus-visible {
-  box-shadow: #222222 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
+.DashboardPageAddCommandButton:focus-visible {
+  box-shadow: white 0 0 0 2px, rgba(255, 255, 255, 0.8) 0 0 0 4px;
   transition: box-shadow .2s;
 }
+.DashboardPageAddCommandButton:active {
+  background-color: #222222;
+  border-color: #000000;
+  transform: scale(.96);
+}
+.DashboardPageAddCommandButton:hover {
+  background-color: white;
+  border-color:1px solid #222222;
+  color: #222222;
+}
 
+.DashboardPageCommandButton {
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  border: none;
+  box-sizing: border-box;
+  color: #222222;
+  cursor: pointer;
+  font-family: lorettolight;
+  font-size: 18px;
+  line-height: 20px;
+  margin: 5px;
+  min-width: 180px;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  -webkit-user-select: none;
+  width: auto;
+}
+.DashboardPageCommandButton:focus-visible {
+ 
+  transition: box-shadow .2s;
+}
 .DashboardPageCommandButton:active {
   background-color: #F7F7F7;
   border-color: #000000;
   transform: scale(.96);
 }
-
 .DashboardPageCommandButton:hover {
   background-color: #222222;
   color: white;
-
-
 }
 
 .DashboardPageServiceButton {
@@ -1057,13 +1099,13 @@ textarea:focus, input:focus{
   background-color: black;
 }
 
-.DashboardPageButton {
+.DashboardPageActionButton {
   padding-top: 10px;
   padding-bottom: 10px;
   padding-left: 25px;
   padding-right: 25px;
   margin: 5px;
-  border-radius: 50px;
+  border-radius: 10px;
   border-color: black;
   border-width: 1px;
   border-style: solid;
@@ -1074,17 +1116,25 @@ textarea:focus, input:focus{
   cursor: pointer;
 }
 
-.DashboardPageButton:hover{
+.DashboardPageActionButton:hover{
   color: white;
   background-color: black;
 }
 
-.DashboardServicesImg{
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px;
-  width: 150px;
-  height: 125px;
+.DashboardPageServicesImg{
+ 
+  width: 100px;
+  height: 80px;
+}
+
+footer {
+  position: fixed;
+  background-color: gray;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  text-align: center;
 }
 
 
